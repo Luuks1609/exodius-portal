@@ -1,0 +1,26 @@
+{
+  "clg": {
+    "prefix": "clg",
+    "body": "console.log($1);",
+  },
+  "react": {
+    "prefix": "react",
+    "body": "import * as React from \"react\";",
+  },
+  "useEffect": {
+    "prefix": "useEffect",
+    "body": ["useEffect(()=> {", "$1", "},[]);"],
+  },
+  "useState": {
+    "prefix": "useState",
+    "body": "const [ $1, $1set ] = useState($2);",
+  },
+  "Async React Function Component": {
+    "prefix": "arjsfc",
+    "body": ["export default function $1() {", "  return $2;", "};"],
+  },
+  "React Function Component": {
+    "prefix": "rjsfc",
+    "body": ["export default function $1() {", "  return $2;", "};"],
+  },
+}
