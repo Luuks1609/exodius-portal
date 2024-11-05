@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 import { createLog } from "@/server/db/actions";
 import type { Log } from "~/lib/types";
 import { logSchema } from "@/server/db/schema";
+import { env } from "~/env";
 
-const LOGGER_API_KEY = process.env.LOGGER_API_KEY;
+const LOGGER_API_KEY = env.LOGGER_API_KEY;
 
 export async function POST(request: NextRequest) {
   console.log("Received POST request");
