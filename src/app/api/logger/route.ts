@@ -11,6 +11,7 @@ export async function POST(request: NextRequest) {
   console.log("Received POST request");
 
   const apiKey = request.headers.get("x-api-key");
+  console.log("Request headers:", request.headers);
   console.log("API Key from request:", apiKey);
 
   // Check if the provided API key matches the one in the environment variables
