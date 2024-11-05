@@ -7,10 +7,14 @@ import { logSchema } from "@/server/db/schema";
 const LOGGER_API_KEY = process.env.LOGGER_API_KEY;
 
 export async function POST(request: NextRequest) {
+  console.log("Received POST request");
+
   const apiKey = request.headers.get("x-api-key");
+  console.log("API Key from request:", apiKey);
 
   // Check if the provided API key matches the one in the environment variables
   if (apiKey !== LOGGER_API_KEY) {
+    console.warn("Unauthorized access attempt with API Key:", apiKey);
     return NextResponse.json(
       {
         success: false,
@@ -20,8 +24,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const requestBody = await request.json();
+  console.log("Request body:", requestBody);
+
   const { project, status, message, errorMessage, action } =
-    (await request.json()) as Record<string, unknown>;
+    requestBody as Record<string, unknown>;
 
   // Validatie van binnenkomende data met behulp van Zod schema
   const parsedLogEntry = logSchema.safeParse({
@@ -33,6 +40,7 @@ export async function POST(request: NextRequest) {
   });
 
   if (!parsedLogEntry.success) {
+    console.error("Invalid log entry data:", parsedLogEntry.error.errors);
     return NextResponse.json(
       {
         success: false,
@@ -44,9 +52,11 @@ export async function POST(request: NextRequest) {
   }
 
   const logEntry: Log = parsedLogEntry.data as Log;
+  console.log("Parsed log entry:", logEntry);
 
   try {
     await createLog(logEntry);
+    console.log("Log created successfully:", logEntry);
     return NextResponse.json({
       success: true,
       message: "Log created successfully.",
