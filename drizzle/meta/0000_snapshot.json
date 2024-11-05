@@ -1,11 +1,11 @@
 {
-  "id": "16c9f44b-4ece-4ab4-b1da-f763f6f737fd",
+  "id": "628226fa-1924-40dc-9498-26b756097611",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.exodius-client-portal_account": {
-      "name": "exodius-client-portal_account",
+    "public.account": {
+      "name": "account",
       "schema": "",
       "columns": {
         "user_id": {
@@ -93,10 +93,10 @@
         }
       },
       "foreignKeys": {
-        "exodius-client-portal_account_user_id_exodius-client-portal_user_id_fk": {
-          "name": "exodius-client-portal_account_user_id_exodius-client-portal_user_id_fk",
-          "tableFrom": "exodius-client-portal_account",
-          "tableTo": "exodius-client-portal_user",
+        "account_user_id_user_id_fk": {
+          "name": "account_user_id_user_id_fk",
+          "tableFrom": "account",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -108,8 +108,8 @@
         }
       },
       "compositePrimaryKeys": {
-        "exodius-client-portal_account_provider_provider_account_id_pk": {
-          "name": "exodius-client-portal_account_provider_provider_account_id_pk",
+        "account_provider_provider_account_id_pk": {
+          "name": "account_provider_provider_account_id_pk",
           "columns": [
             "provider",
             "provider_account_id"
@@ -118,8 +118,8 @@
       },
       "uniqueConstraints": {}
     },
-    "public.exodius-client-portal_client": {
-      "name": "exodius-client-portal_client",
+    "public.client": {
+      "name": "client",
       "schema": "",
       "columns": {
         "id": {
@@ -158,8 +158,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.exodius-client-portal_post": {
-      "name": "exodius-client-portal_post",
+    "public.log": {
+      "name": "log",
       "schema": "",
       "columns": {
         "id": {
@@ -168,71 +168,103 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_by": {
-          "name": "created_by",
+        "project": {
+          "name": "project",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
+        "status": {
+          "name": "status",
+          "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "notNull": true
         },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
+        "message": {
+          "name": "message",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "error_message": {
+          "name": "error_message",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "action": {
+          "name": "action",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": false
         }
       },
-      "indexes": {
-        "created_by_idx": {
-          "name": "created_by_idx",
-          "columns": [
-            {
-              "expression": "created_by",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.payments": {
+      "name": "payments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
         },
-        "name_idx": {
-          "name": "name_idx",
-          "columns": [
-            {
-              "expression": "name",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
+        "project_id": {
+          "name": "project_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date": {
+          "name": "date",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payment_type": {
+          "name": "payment_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recurring_frequency": {
+          "name": "recurring_frequency",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
+      "indexes": {},
       "foreignKeys": {
-        "exodius-client-portal_post_created_by_exodius-client-portal_user_id_fk": {
-          "name": "exodius-client-portal_post_created_by_exodius-client-portal_user_id_fk",
-          "tableFrom": "exodius-client-portal_post",
-          "tableTo": "exodius-client-portal_user",
+        "payments_project_id_projects_id_fk": {
+          "name": "payments_project_id_projects_id_fk",
+          "tableFrom": "payments",
+          "tableTo": "projects",
           "columnsFrom": [
-            "created_by"
+            "project_id"
           ],
           "columnsTo": [
             "id"
@@ -244,8 +276,74 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.exodius-client-portal_session": {
-      "name": "exodius-client-portal_session",
+    "public.projects": {
+      "name": "projects",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "projects_client_id_client_id_fk": {
+          "name": "projects_client_id_client_id_fk",
+          "tableFrom": "projects",
+          "tableTo": "client",
+          "columnsFrom": [
+            "client_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.session": {
+      "name": "session",
       "schema": "",
       "columns": {
         "session_token": {
@@ -285,10 +383,10 @@
         }
       },
       "foreignKeys": {
-        "exodius-client-portal_session_user_id_exodius-client-portal_user_id_fk": {
-          "name": "exodius-client-portal_session_user_id_exodius-client-portal_user_id_fk",
-          "tableFrom": "exodius-client-portal_session",
-          "tableTo": "exodius-client-portal_user",
+        "session_user_id_user_id_fk": {
+          "name": "session_user_id_user_id_fk",
+          "tableFrom": "session",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -302,8 +400,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.exodius-client-portal_user": {
-      "name": "exodius-client-portal_user",
+    "public.user": {
+      "name": "user",
       "schema": "",
       "columns": {
         "id": {
@@ -343,8 +441,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.exodius-client-portal_verification_token": {
-      "name": "exodius-client-portal_verification_token",
+    "public.verification_token": {
+      "name": "verification_token",
       "schema": "",
       "columns": {
         "identifier": {
@@ -369,8 +467,8 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "exodius-client-portal_verification_token_identifier_token_pk": {
-          "name": "exodius-client-portal_verification_token_identifier_token_pk",
+        "verification_token_identifier_token_pk": {
+          "name": "verification_token_identifier_token_pk",
           "columns": [
             "identifier",
             "token"

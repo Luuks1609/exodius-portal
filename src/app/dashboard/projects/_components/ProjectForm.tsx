@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { createProject, updateProject } from "~/server/db/actions"; // Assuming you have these actions
 import { projectFormSchema } from "~/server/db/schema";
-import { Client, Project } from "~/lib/types";
+import type { Client, Project } from "~/lib/types";
 import { useToast } from "~/hooks/use-toast";
 import { useEffect, useState } from "react";
 import {
@@ -45,75 +45,85 @@ export default function ProjectForm({ onSubmit, editData }: Props) {
   const form = useForm<z.infer<typeof projectFormSchema>>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
-      clientId: editData?.clientId || 0,
-      name: editData?.name || "",
-      description: editData?.description || "",
-      notes: editData?.notes || "",
-      startDate: editData?.startDate || "",
-      endDate: editData?.endDate || "",
+      clientId: editData?.clientId ?? 0,
+      name: editData?.name ?? "",
+      description: editData?.description ?? "",
+      notes: editData?.notes ?? "",
+      startDate: editData?.startDate ?? "",
+      endDate: editData?.endDate ?? "",
     },
   });
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const response = await getClients();
-      if (response.success) {
-        setClients(response.data as Client[]);
+      try {
+        const response = await getClients();
+        if (response.success) {
+          setClients(response.data as Client[]);
+        } else {
+          console.error("Failed to fetch clients:", response.message);
+        }
+      } catch (error) {
+        console.error("Error in fetchProjects:", error);
       }
     };
-    fetchProjects();
+    void fetchProjects(); // Explicitly marking the promise as ignored
   }, []);
 
   async function handleSubmit(data: z.infer<typeof projectFormSchema>) {
     const formData = new FormData();
-    formData.append("clientId", data.clientId.toString());
+    formData.append("clientId", String(data.clientId));
     formData.append("name", data.name);
-    formData.append("description", data.description || "");
-    formData.append("notes", data.notes || "");
-    formData.append("startDate", data.startDate || "");
+    formData.append("description", data.description ?? "");
+    formData.append("notes", data.notes ?? "");
+    formData.append("startDate", data.startDate ?? "");
 
-    if (editData) {
-      const { data: success, errors } = await updateProject(
-        editData.id,
-        formData,
-      );
-      if (errors) {
-        console.log(errors);
-        toast({
-          variant: "destructive",
-          title: "Something went wrong!",
-        });
-      }
-      if (success) {
-        toast({
-          title: "Project updated successfully!",
-        });
-        form.reset();
-
-        if (onSubmit) {
-          onSubmit();
+    try {
+      if (editData) {
+        const { data: success, errors } = await updateProject(
+          editData.id,
+          formData,
+        );
+        if (errors) {
+          console.log(errors);
+          toast({
+            variant: "destructive",
+            title: "Something went wrong!",
+          });
+        } else if (success) {
+          toast({
+            title: "Project updated successfully!",
+          });
+          form.reset();
+          if (onSubmit) {
+            onSubmit();
+          }
+        }
+      } else {
+        const { data: success, errors } = await createProject(formData);
+        if (errors) {
+          toast({
+            variant: "destructive",
+            title: "Something went wrong!",
+          });
+          console.log(errors);
+        } else if (success) {
+          toast({
+            title: "Project added successfully!",
+          });
+          form.reset();
+          router.push("/dashboard/projects");
+          if (onSubmit) {
+            onSubmit();
+          }
         }
       }
-    } else {
-      const { data: success, errors } = await createProject(formData);
-      if (errors) {
-        toast({
-          variant: "destructive",
-          title: "Something went wrong!",
-        });
-        console.log(errors);
-      }
-      if (success) {
-        toast({
-          title: "Project added successfully!",
-        });
-        form.reset();
-        router.push("/dashboard/projects");
-
-        if (onSubmit) {
-          onSubmit();
-        }
-      }
+    } catch (error) {
+      console.error("Error during form submission:", error);
+      toast({
+        variant: "destructive",
+        title: "Something went wrong!",
+      });
     }
   }
 
@@ -123,12 +133,21 @@ export default function ProjectForm({ onSubmit, editData }: Props) {
         <FormField
           control={form.control}
           name="clientId"
-          render={({ field }) => (
+          render={({
+            field,
+          }: {
+            field: {
+              onChange: (value: number) => void;
+              value: number | undefined;
+            };
+          }) => (
             <FormItem>
               <FormLabel>Client ID</FormLabel>
               <FormControl>
                 <Select
-                  onValueChange={(value) => field.onChange(Number(value))}
+                  onValueChange={(value: string) =>
+                    field.onChange(Number(value))
+                  }
                   value={field.value ? String(field.value) : ""}
                 >
                   <SelectTrigger>
@@ -180,7 +199,7 @@ export default function ProjectForm({ onSubmit, editData }: Props) {
             <FormItem>
               <FormLabel>Start Date</FormLabel>
               <FormControl>
-                <Input type="date" {...field} value={field.value || ""} />
+                <Input type="date" {...field} value={field.value ?? ""} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -193,7 +212,7 @@ export default function ProjectForm({ onSubmit, editData }: Props) {
             <FormItem>
               <FormLabel>End Date</FormLabel>
               <FormControl>
-                <Input type="date" {...field} value={field.value || ""} />
+                <Input type="date" {...field} value={field.value ?? ""} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -209,7 +228,7 @@ export default function ProjectForm({ onSubmit, editData }: Props) {
               <FormControl>
                 <Editor
                   onContentChange={(content) => field.onChange(content)}
-                  editData={editData?.notes}
+                  editData={editData?.notes ?? ""}
                 />
               </FormControl>
               <FormMessage />

@@ -5,11 +5,8 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
-import Credentials from "next-auth/providers/credentials";
-import DiscordProvider from "next-auth/providers/discord";
 import Email from "next-auth/providers/email";
 
-import { env } from "~/env";
 import { db } from "~/server/db";
 import {
   accounts,
@@ -53,6 +50,15 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
+    async signIn({ user }) {
+      const emailWhitelist = ["luuks1609@gmail.com"];
+
+      if (user.email && emailWhitelist.includes(user.email)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   adapter: DrizzleAdapter(db, {
     usersTable: users,

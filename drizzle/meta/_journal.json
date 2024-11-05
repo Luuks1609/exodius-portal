@@ -1,40 +1,12 @@
 {
-  "version": "7",
+  "version": "1",
   "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
       "version": "7",
-      "when": 1730116192349,
-      "tag": "0000_busy_silhouette",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1730202792944,
-      "tag": "0001_majestic_thena",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1730219886940,
-      "tag": "0002_fluffy_warlock",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1730231215266,
-      "tag": "0003_calm_puff_adder",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1730241451758,
-      "tag": "0004_lowly_moon_knight",
+      "when": 1730829854809,
+      "tag": "0000_deep_kulan_gath",
       "breakpoints": true
     }
   ]

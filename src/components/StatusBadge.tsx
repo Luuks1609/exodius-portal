@@ -15,7 +15,7 @@ export default function StatusBadge({
 }) {
   const variant = text as Variant; // Cast text to Variant
   return (
-    <div className="flex items-center gap-x-2 rounded bg-foreground px-3 py-2 font-semibold text-background">
+    <div className="flex items-center gap-x-2 rounded bg-transparent px-3 py-2 font-semibold text-foreground">
       {variantClasses[variant]}
       {text}
     </div>

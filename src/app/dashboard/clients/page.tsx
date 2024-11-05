@@ -23,16 +23,23 @@ export default async function Clients() {
     <div className="">
       <h1 className="pb-5 text-3xl font-black">Clients</h1>
       <CreateClientButton />
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="">Bedrijf</TableHead>
-            <TableHead>Contactpersoon</TableHead>
-            <TableHead>E-mailadres</TableHead>
-            <TableHead className="">Telefoonnummer</TableHead>
+      <Table className="">
+        <TableHeader className="">
+          <TableRow className="">
+            <TableHead className="font-normal text-white">Bedrijf</TableHead>
+            <TableHead className="font-normal text-white">
+              Contactpersoon
+            </TableHead>
+            <TableHead className="font-normal text-white">
+              E-mailadres
+            </TableHead>
+            <TableHead className="font-normal text-white">
+              Telefoonnummer
+            </TableHead>
+            <TableHead className=""></TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="bg-[#171717]">
           {clients.map((client) => (
             <TableRow key={client.id}>
               <TableCell className="font-medium">

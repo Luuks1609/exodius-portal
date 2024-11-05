@@ -1,5 +1,5 @@
+import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
-import { ReactNode } from "react";
 import { getServerAuthSession } from "~/server/auth";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";

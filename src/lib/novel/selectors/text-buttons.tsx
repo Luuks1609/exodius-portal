@@ -6,50 +6,59 @@ import {
   StrikethroughIcon,
   UnderlineIcon,
 } from "lucide-react";
-import { EditorBubbleItem, useEditor } from "novel";
+import { EditorBubbleItem, useEditor, EditorInstance } from "novel";
 import { Button } from "~/components/ui/button";
+
+type TextButtonItem = {
+  name: string;
+  isActive: (editor: EditorInstance) => boolean;
+  command: (editor: EditorInstance) => void;
+  icon: React.ElementType;
+};
 
 export const TextButtons = () => {
   const { editor } = useEditor();
   if (!editor) return null;
-  const items: any[] = [
+
+  const items: TextButtonItem[] = [
     {
       name: "bold",
-      isActive: (editor: any) => editor.isActive("bold"),
-      command: (editor: any) => editor.chain().focus().toggleBold().run(),
+      isActive: (editor) => editor.isActive("bold"),
+      command: (editor) => editor.chain().focus().toggleBold().run(),
       icon: BoldIcon,
     },
     {
       name: "italic",
-      isActive: (editor: any) => editor.isActive("italic"),
-      command: (editor: any) => editor.chain().focus().toggleItalic().run(),
+      isActive: (editor) => editor.isActive("italic"),
+      command: (editor) => editor.chain().focus().toggleItalic().run(),
       icon: ItalicIcon,
     },
     {
       name: "underline",
-      isActive: (editor: any) => editor.isActive("underline"),
-      command: (editor: any) => editor.chain().focus().toggleUnderline().run(),
+      isActive: (editor) => editor.isActive("underline"),
+      command: (editor) => editor.chain().focus().toggleUnderline().run(),
       icon: UnderlineIcon,
     },
     {
       name: "strike",
-      isActive: (editor: any) => editor.isActive("strike"),
-      command: (editor: any) => editor.chain().focus().toggleStrike().run(),
+      isActive: (editor) => editor.isActive("strike"),
+      command: (editor) => editor.chain().focus().toggleStrike().run(),
       icon: StrikethroughIcon,
     },
     {
       name: "code",
-      isActive: (editor: any) => editor.isActive("code"),
-      command: (editor: any) => editor.chain().focus().toggleCode().run(),
+      isActive: (editor) => editor.isActive("code"),
+      command: (editor) => editor.chain().focus().toggleCode().run(),
       icon: CodeIcon,
     },
   ];
+
   return (
     <div className="flex">
       {items.map((item) => (
         <EditorBubbleItem
           key={item.name}
-          onSelect={(editor) => {
+          onSelect={() => {
             item.command(editor);
           }}
         >

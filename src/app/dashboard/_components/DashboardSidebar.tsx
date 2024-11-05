@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -8,8 +10,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
+import { usePathname } from "next/navigation";
 
 export default function DashboardSidebar() {
+  const pathname = usePathname();
   const items = [
     {
       title: "Dashboard",
@@ -28,6 +32,10 @@ export default function DashboardSidebar() {
       url: "/dashboard/payments",
     },
     {
+      title: "Logs",
+      url: "/dashboard/logs",
+    },
+    {
       title: "Settings",
       url: "/dashboard/",
     },
@@ -35,22 +43,24 @@ export default function DashboardSidebar() {
 
   return (
     <Sidebar>
-      <SidebarContent>
-        <SidebarGroup>
+      <SidebarContent className="px-2">
+        <SidebarGroup className="border-b">
           <SidebarGroupContent>
-            <SidebarGroupLabel className="text-lg font-semibold tracking-wider text-green-700">
+            <SidebarGroupLabel className="text-lg font-light tracking-wider text-white">
               Exodius
             </SidebarGroupLabel>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup className="p-5">
+        <SidebarGroup className="">
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
-                      <span className="text-base font-semibold tracking-wider">
+                      <span
+                        className={`font-light tracking-wider hover:text-white ${pathname === item.url ? "text-foreground" : "text-muted-foreground"}`}
+                      >
                         {item.title}
                       </span>
                     </a>

@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "~/components/ui/badge";
 import { getPayments } from "~/server/db/data";
 import CreatePaymentButton from "./_components/CreatePaymentButton";
 import EditPaymentButton from "./_components/EditPaymentButton";
@@ -46,9 +45,9 @@ export default async function Payments() {
                 {payment.project.name}
               </TableCell>
               <TableCell>{toEur(payment.amount)}</TableCell>
-              <TableCell>{payment.date || "-"}</TableCell>
+              <TableCell>{payment.date ?? "-"}</TableCell>
               <TableCell>{payment.paymentType}</TableCell>
-              <TableCell>{payment.recurringFrequency || "-"}</TableCell>
+              <TableCell>{payment.recurringFrequency ?? "-"}</TableCell>
               <TableCell className="w-[150px]">
                 <StatusBadge
                   text={

@@ -8,14 +8,12 @@ import {
   EditorContent,
   type EditorInstance,
   EditorRoot,
-  type JSONContent,
 } from "novel";
 import { handleCommandNavigation } from "novel/extensions";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { defaultExtensions } from "~/lib/novel/extensions";
 import { slashCommand, suggestionItems } from "~/lib/novel/slashcommand";
-import { defaultEditorContent } from "~/lib/novel/content";
 import { TextButtons } from "~/lib/novel/selectors/text-buttons";
 import { NodeSelector } from "~/lib/novel/selectors/node-selector";
 import { LinkSelector } from "~/lib/novel/selectors/link-selector";
@@ -25,13 +23,12 @@ import { useDebouncedCallback } from "use-debounce";
 
 const extensions = [...defaultExtensions, slashCommand];
 
-const Editor = ({
-  onContentChange,
-  editData,
-}: {
+interface EditorProps {
   onContentChange: (content: string) => void;
-  editData: any;
-}) => {
+  editData: string | null;
+}
+
+const Editor = ({ onContentChange, editData }: EditorProps) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
@@ -47,20 +44,21 @@ const Editor = ({
   return (
     <EditorRoot>
       <EditorContent
-        initialContent={editData || null}
+        // @ts-expect-error: Ignoring TypeScript error for initialContent assignment
+        initialContent={editData ?? undefined}
         extensions={extensions}
-        className="relative h-full w-full rounded-md border border-input bg-background px-3 py-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="relative h-full w-full rounded-md border border-input bg-background px-3 py-2 text-white ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         editorProps={{
           handleDOMEvents: {
             keydown: (_view, event) => handleCommandNavigation(event),
           },
           attributes: {
             class:
-              "prose prose-neutral prose-headings:font-title font-default focus:outline-none max-w-full",
+              "prose prose-neutral prose-p:text-white prose-headings:text-white prose-headings:font-title font-default focus:outline-none max-w-full text-white",
           },
         }}
         onUpdate={({ editor }) => {
-          debouncedUpdates(editor);
+          void debouncedUpdates(editor); // Use void to explicitly ignore the promise
         }}
       >
         <EditorCommand className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">

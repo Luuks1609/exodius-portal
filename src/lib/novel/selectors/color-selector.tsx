@@ -1,5 +1,4 @@
 import { Check, ChevronDown } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
 import { EditorBubbleItem, useEditor } from "novel";
 import {
   Popover,
@@ -139,12 +138,13 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
               key={index}
               onSelect={() => {
                 editor.commands.unsetColor();
-                name !== "Default" &&
+                if (name !== "Default") {
                   editor
                     .chain()
                     .focus()
                     .setColor(color || "")
                     .run();
+                }
               }}
               className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-accent"
             >
@@ -169,7 +169,9 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
               key={index}
               onSelect={() => {
                 editor.commands.unsetHighlight();
-                name !== "Default" && editor.commands.setHighlight({ color });
+                if (name !== "Default") {
+                  editor.commands.setHighlight({ color });
+                }
               }}
               className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-accent"
             >

@@ -1,10 +1,8 @@
 import { relations, sql } from "drizzle-orm";
 import {
-  date,
   index,
   integer,
   jsonb,
-  numeric,
   pgTableCreator,
   primaryKey,
   serial,
@@ -21,30 +19,9 @@ import { z } from "zod";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator(
-  (name) => `exodius-client-portal_${name}`,
-);
 
-export const posts = createTable(
-  "post",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("created_by", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date(),
-    ),
-  },
-  (example) => ({
-    createdByIdIdx: index("created_by_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  }),
-);
+// this is kinda useless but im too lazy to fix it
+export const createTable = pgTableCreator((name) => `${name}`);
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 })
@@ -188,7 +165,7 @@ export const projectFormSchema = z.object({
   clientId: z.number().int().positive("Client ID must be a positive integer"),
   name: z.string().min(1, "Project name is required"),
   description: z.string().optional(),
-  notes: z.any().optional(),
+  notes: z.string().optional(),
   startDate: z.string().optional().nullable(),
   endDate: z.string().optional().nullable(),
 });
@@ -200,6 +177,7 @@ export const payments = createTable("payments", {
     .references(() => projects.id)
     .notNull(),
   amount: integer("amount").notNull(),
+  description: varchar("description"),
   date: varchar("date", { length: 10 }),
   paymentType: varchar("payment_type", { length: 20 }).notNull(), // "one-time" or "recurring"
   recurringFrequency: varchar("recurring_frequency", { length: 20 }), // "yearly", "monthly" (nullable)
@@ -219,6 +197,29 @@ export const paymentFormSchema = z.object({
   amount: z.number().positive("Amount must be a positive number"),
   date: z.string().optional().nullable(),
   paymentType: z.string(),
+  description: z.string(),
   recurringFrequency: z.string().optional().nullable(),
   paymentStatus: z.number(),
+});
+
+// Logs
+export const logs = createTable("log", {
+  id: serial("id").primaryKey(),
+  project: varchar("project", { length: 255 }).notNull(),
+  status: varchar("status", { length: 50 }).notNull(),
+  message: varchar("message", { length: 255 }),
+  errorMessage: varchar("error_message", { length: 255 }),
+  action: varchar("action", { length: 50 }),
+});
+
+export const logSchema = z.object({
+  project: z.string().min(1, "Project is required"),
+  status: z
+    .enum(["failed", "success"])
+    .refine((val) => ["failed", "success"].includes(val), {
+      message: "Status must be either 'failed' or 'success'",
+    }),
+  message: z.string(),
+  errorMessage: z.string().optional(),
+  action: z.string().min(1, "Action is required"),
 });

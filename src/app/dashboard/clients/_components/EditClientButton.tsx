@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Pencil, Plus } from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Pencil } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useState } from "react";
 import ClientForm from "./ClientForm";
-import { Client } from "~/lib/types";
+import type { Client } from "~/lib/types";
 
 export default function EditClientButton({ client }: { client: Client }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

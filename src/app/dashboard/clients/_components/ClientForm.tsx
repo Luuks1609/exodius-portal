@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { createClient, updateClient } from "~/server/db/actions";
 import { clientFormSchema } from "~/server/db/schema";
-import { Client } from "~/lib/types";
+import type { Client } from "~/lib/types"; // Changed to import type
 import { useToast } from "~/hooks/use-toast";
 
 interface Props {

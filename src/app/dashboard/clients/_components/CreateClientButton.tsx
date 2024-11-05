@@ -20,7 +20,7 @@ export default function CreateClientButton() {
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button className="mb-5" onClick={() => setIsDialogOpen(true)}>
-          <Plus /> Add client
+          <Plus className="" /> Add client
         </Button>
       </DialogTrigger>
       <DialogContent>

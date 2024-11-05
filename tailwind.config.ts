@@ -65,6 +65,13 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        brand: {
+          "primary-dark": "var(--brand-primary-dark)",
+          "primary-light": "var(--brand-primary-light)",
+          "secondary-dark": "var(--brand-secondary-dark)",
+          "secondary-light": "var(--brand-secondary-light)",
+          text: "hsl(var(--brand-text))",
+        },
       },
     },
   },

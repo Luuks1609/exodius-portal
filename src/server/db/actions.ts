@@ -5,6 +5,7 @@ import { db } from ".";
 import {
   clientFormSchema,
   clients,
+  logs,
   paymentFormSchema,
   payments,
   projectFormSchema,
@@ -12,6 +13,7 @@ import {
 } from "./schema";
 import { revalidatePath } from "next/cache";
 import { ZodError } from "zod";
+import type { Log } from "~/lib/types";
 
 export const transformZodErrors = (error: ZodError) =>
   error.issues.map((issue) => ({
@@ -103,6 +105,7 @@ export async function createPayment(formData: FormData) {
       projectId: Number(formData.get("projectId")),
       amount: Number(formData.get("amount")),
       date: formData.get("date"),
+      description: formData.get("description"),
       paymentType: formData.get("paymentType"),
       recurringFrequency: formData.get("recurringFrequency"),
       paymentStatus: Number(formData.get("paymentStatus")),
@@ -126,6 +129,7 @@ export async function updatePayment(paymentId: number, formData: FormData) {
       projectId: Number(formData.get("projectId")),
       amount: Number(formData.get("amount")),
       date: formData.get("date"),
+      description: formData.get("description"),
       paymentType: formData.get("paymentType"),
       recurringFrequency: formData.get("recurringFrequency"),
       paymentStatus: Number(formData.get("paymentStatus")),
@@ -231,6 +235,17 @@ export async function deleteProject(projectId: number) {
         message: "An unexpected error occurred. Could not delete project.",
       },
       data: null,
+    };
+  }
+}
+
+export async function createLog(log: Log) {
+  try {
+    await db.insert(logs).values(log);
+  } catch (error) {
+    return {
+      success: false,
+      error,
     };
   }
 }

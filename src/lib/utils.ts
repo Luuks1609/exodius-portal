@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function toEur(amount: number) {
-  let EUR = new Intl.NumberFormat("nl-NL", {
+  const EUR = new Intl.NumberFormat("nl-NL", {
     style: "currency",
     currency: "EUR",
   });

@@ -10,7 +10,6 @@ import {
 import { Eye, Plus } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { getProjects } from "~/server/db/data";
-import DeletePaymentButton from "../payments/_components/DeletePaymentButton";
 import DeleteProjectButton from "./_components/DeleteProjectButton";
 
 export default async function Projects() {
@@ -35,7 +34,7 @@ export default async function Projects() {
             <TableHead>Klant</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="bg-[#171717]">
           {projects.map((project) => (
             <TableRow key={project.id}>
               <TableCell className="w-[250px] font-medium">

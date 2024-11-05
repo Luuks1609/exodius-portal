@@ -1,6 +1,6 @@
 import { getProjectById } from "~/server/db/data";
 import ProjectForm from "../_components/ProjectForm";
-import { Project } from "~/lib/types";
+import type { Project } from "~/lib/types";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;

@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Pencil } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { useState } from "react";
-import { Payment } from "~/lib/types";
+import type { Payment } from "~/lib/types";
 import PaymentForm from "./PaymentForm";
 
 export default function EditPaymentButton({ payment }: { payment: Payment }) {

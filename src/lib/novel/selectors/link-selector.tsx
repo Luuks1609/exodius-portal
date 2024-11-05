@@ -1,13 +1,7 @@
 import { cn } from "@/lib/utils";
 import { useEditor } from "novel";
 import { Check, Trash } from "lucide-react";
-import {
-  type Dispatch,
-  type FC,
-  type SetStateAction,
-  useEffect,
-  useRef,
-} from "react";
+import { useEffect, useRef } from "react";
 import {
   Popover,
   PopoverContent,
@@ -15,11 +9,11 @@ import {
 } from "~/components/ui/popover";
 import { Button } from "~/components/ui/button";
 
-export function isValidUrl(url: string) {
+export function isValidUrl(url: string): boolean {
   try {
     new URL(url);
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
@@ -29,10 +23,11 @@ export function getUrlFromString(str: string) {
     if (str.includes(".") && !str.includes(" ")) {
       return new URL(`https://${str}`).toString();
     }
-  } catch (e) {
+  } catch {
     return null;
   }
 }
+
 interface LinkSelectorProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -44,8 +39,9 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
 
   // Autofocus on input by default
   useEffect(() => {
-    inputRef.current && inputRef.current?.focus();
-  });
+    inputRef.current?.focus();
+  }, []); // Added dependency array to avoid warning
+
   if (!editor) return null;
 
   return (
@@ -69,11 +65,12 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
       <PopoverContent align="start" className="w-60 p-0" sideOffset={10}>
         <form
           onSubmit={(e) => {
-            const target = e.currentTarget as HTMLFormElement;
             e.preventDefault();
-            const input = target[0] as HTMLInputElement;
+            const input = e.currentTarget[0] as HTMLInputElement;
             const url = getUrlFromString(input.value);
-            url && editor.chain().focus().setLink({ href: url }).run();
+            if (url) {
+              editor.chain().focus().setLink({ href: url }).run();
+            }
           }}
           className="flex p-1"
         >
@@ -82,7 +79,7 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
             type="text"
             placeholder="Paste a link"
             className="flex-1 bg-background p-1 text-sm outline-none"
-            defaultValue={editor.getAttributes("link").href || ""}
+            defaultValue={(editor.getAttributes("link").href as string) || ""}
           />
           {editor.getAttributes("link").href ? (
             <Button

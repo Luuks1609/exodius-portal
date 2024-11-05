@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,10 +22,13 @@ import {
 } from "@/components/ui/select";
 import { createPayment, updatePayment } from "~/server/db/actions";
 import { paymentFormSchema } from "~/server/db/schema";
-import { Payment, Project } from "~/lib/types";
+
 import { useToast } from "~/hooks/use-toast";
 import { getProjects } from "~/server/db/data";
 import { statusses } from "~/lib/constants";
+
+import type { Payment, Project } from "~/lib/types";
+import type { z } from "zod";
 
 interface Props {
   onSubmit?: () => void;
@@ -44,6 +46,7 @@ export default function PaymentForm({ onSubmit, editData }: Props) {
       projectId: editData?.projectId ?? 0,
       amount: editData?.amount ?? 0,
       date: editData?.date ?? "",
+      description: editData?.description ?? "",
       paymentType: editData?.paymentType ?? "one-time",
       recurringFrequency: editData?.recurringFrequency ?? "", // Changed to empty string for optional handling
       paymentStatus: editData?.paymentStatus ?? 1,
@@ -67,6 +70,7 @@ export default function PaymentForm({ onSubmit, editData }: Props) {
     formData.append("projectId", data.projectId.toString());
     formData.append("amount", data.amount.toString());
     formData.append("date", data.date ?? "");
+    formData.append("description", data.description ?? "");
     formData.append("paymentType", data.paymentType);
     formData.append(
       "recurringFrequency",
@@ -90,7 +94,7 @@ export default function PaymentForm({ onSubmit, editData }: Props) {
         : "Payment added successfully!";
       toast({ title: message });
       form.reset();
-      onSubmit && onSubmit();
+      if (onSubmit) onSubmit();
     }
   }
 
@@ -155,6 +159,19 @@ export default function PaymentForm({ onSubmit, editData }: Props) {
               <FormLabel>Date</FormLabel>
               <FormControl>
                 <Input type="date" {...field} value={field.value ?? ""} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input type="text" {...field} value={field.value ?? ""} />
               </FormControl>
               <FormMessage />
             </FormItem>

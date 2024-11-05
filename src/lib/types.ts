@@ -1,5 +1,3 @@
-import { statusses } from "~/lib/constants";
-
 export interface Client {
   companyName: string;
   contactName: string | null;
@@ -13,6 +11,7 @@ export interface Payment {
   projectId: number;
   amount: number;
   date: string | null;
+  description: string | null;
   paymentType: string;
   recurringFrequency?: string | null;
   paymentStatus: number;
@@ -26,4 +25,12 @@ export interface Project {
   notes?: string | null;
   startDate: string | null; // Allow null
   endDate: string | null; // Allow null
+}
+
+export interface Log {
+  project: string;
+  status: "failed" | "success";
+  message: string;
+  errorMessage?: string;
+  action: string;
 }

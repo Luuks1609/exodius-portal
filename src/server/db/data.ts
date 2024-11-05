@@ -1,10 +1,9 @@
 "use server";
 
-import { ZodError } from "zod";
+import type { ZodError } from "zod";
 import { db } from ".";
 import { clients, payments, projects } from "./schema";
-import { asc, desc, eq } from "drizzle-orm";
-import { Project } from "~/lib/types";
+import { asc, eq } from "drizzle-orm";
 
 export async function getClients() {
   try {
