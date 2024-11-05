@@ -24,11 +24,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const requestBody = await request.json();
-  console.log("Request body:", requestBody);
-
   const { project, status, message, errorMessage, action } =
-    requestBody as Record<string, unknown>;
+    (await request.json()) as Record<string, unknown>;
 
   // Validatie van binnenkomende data met behulp van Zod schema
   const parsedLogEntry = logSchema.safeParse({
