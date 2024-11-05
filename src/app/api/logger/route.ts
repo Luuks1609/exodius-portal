@@ -4,7 +4,22 @@ import { createLog } from "@/server/db/actions";
 import type { Log } from "~/lib/types";
 import { logSchema } from "@/server/db/schema";
 
+const LOGGER_API_KEY = process.env.LOGGER_API_KEY;
+
 export async function POST(request: NextRequest) {
+  const apiKey = request.headers.get("x-api-key");
+
+  // Check if the provided API key matches the one in the environment variables
+  if (apiKey !== LOGGER_API_KEY) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Unauthorized access",
+      },
+      { status: 403 },
+    );
+  }
+
   const { project, status, message, errorMessage, action } =
     (await request.json()) as Record<string, unknown>;
 
