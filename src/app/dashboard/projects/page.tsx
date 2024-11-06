@@ -27,7 +27,7 @@ export default async function Projects() {
           <Plus /> Add project
         </Button>
       </a>
-      <Table>
+      <Table className="border">
         <TableHeader>
           <TableRow>
             <TableHead className="">Naam</TableHead>

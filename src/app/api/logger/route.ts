@@ -4,17 +4,13 @@ import { createLog } from "@/server/db/actions";
 import type { Log } from "~/lib/types";
 import { logSchema } from "@/server/db/schema";
 import { env } from "~/env";
+import { DiscordClient } from "~/lib/discord-client";
 
 const LOGGER_API_KEY = env.LOGGER_API_KEY;
 
 export async function POST(request: NextRequest) {
-  console.log("Received POST request");
-
   const apiKey = request.headers.get("x-api-key");
-  console.log("Request headers:", request.headers);
-  console.log("API Key from request:", apiKey);
 
-  // Check if the provided API key matches the one in the environment variables
   if (apiKey !== LOGGER_API_KEY) {
     console.warn("Unauthorized access attempt with API Key:", apiKey);
     return NextResponse.json(
@@ -29,7 +25,6 @@ export async function POST(request: NextRequest) {
   const { project, status, message, errorMessage, action } =
     (await request.json()) as Record<string, unknown>;
 
-  // Validatie van binnenkomende data met behulp van Zod schema
   const parsedLogEntry = logSchema.safeParse({
     project,
     status,
@@ -51,11 +46,22 @@ export async function POST(request: NextRequest) {
   }
 
   const logEntry: Log = parsedLogEntry.data as Log;
-  console.log("Parsed log entry:", logEntry);
 
   try {
     await createLog(logEntry);
-    console.log("Log created successfully:", logEntry);
+
+    // Check if the status is false and send a Discord notification
+    if (logEntry.status === "failed") {
+      console.log("ran?");
+      const discord = new DiscordClient(env.DISCORD_BOT_TOKEN);
+      await discord.sendEmbedToChannel(env.DISCORD_CHANNEL_ID, {
+        title: "Log Entry Failed",
+        description: `Project: ${logEntry.project}\nMessage: ${logEntry.message}\nError: ${logEntry.errorMessage}\nAction:${logEntry.action}`,
+        color: 0xff0000, // Red color for failure
+      });
+      // await sendDiscordNotification(logEntry); // Call the function to send a notification
+    }
+
     return NextResponse.json({
       success: true,
       message: "Log created successfully.",

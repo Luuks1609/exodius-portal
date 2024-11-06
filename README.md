@@ -11,10 +11,10 @@
 - [x] WYSIWYT editor for project notes
 - [x] Add more branding and custom styling
 - [x] Add description field to payments
-- [ ] Logger securen met api-key of whatever
-- [ ] Markup for logger page, table with all logs and status
+- [x] Logger securen met api-key of whatever
+- [x] Markup for logger page, table with all logs and status
 - [ ] Markup for logger page, per client table with logs and status (optional)
-- [ ] Make Discord bot and route failed calls through (api) there so you get notification for failed logs
+- [x] Make Discord bot and route failed calls through (api) there so you get notification for failed logs
 - [ ] Think of ways to improve dashboard page (charts etc)
 - [ ] Think of ways to improve project page (what else do you need)
 - [ ] Theme switcher

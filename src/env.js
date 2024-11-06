@@ -28,6 +28,8 @@ export const env = createEnv({
     EMAIL_SERVER_PORT: z.string(),
     EMAIL_FROM: z.string(),
     LOGGER_API_KEY: z.string(),
+    DISCORD_BOT_TOKEN: z.string(),
+    DISCORD_CHANNEL_ID: z.string(),
   },
 
   /**
@@ -54,6 +56,8 @@ export const env = createEnv({
     EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
     EMAIL_FROM: process.env.EMAIL_FROM,
     LOGGER_API_KEY: process.env.LOGGER_API_KEY,
+    DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN,
+    DISCORD_CHANNEL_ID: process.env.DISCORD_CHANNEL_ID,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

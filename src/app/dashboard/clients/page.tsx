@@ -7,10 +7,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { getClients } from "~/server/db/data";
 import CreateClientButton from "./_components/CreateClientButton";
 import EditClientButton from "./_components/EditClientButton";
 import DeleteClientButton from "./_components/DeleteClientButton";
+
+import { getClients } from "~/server/db/data";
 
 export default async function Clients() {
   const { data: clients, success, message } = await getClients();
@@ -23,7 +24,7 @@ export default async function Clients() {
     <div className="">
       <h1 className="pb-5 text-3xl font-black">Clients</h1>
       <CreateClientButton />
-      <Table className="">
+      <Table className="border">
         <TableHeader className="">
           <TableRow className="">
             <TableHead className="font-normal text-white">Bedrijf</TableHead>

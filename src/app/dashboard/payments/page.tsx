@@ -16,7 +16,7 @@ import { statusses } from "~/lib/constants";
 
 export default async function Payments() {
   const { data: payments, success, message } = await getPayments();
-
+  console.log(payments);
   if (!success) {
     console.log(message);
   }
@@ -25,7 +25,7 @@ export default async function Payments() {
     <div className="">
       <h1 className="pb-5 text-3xl font-black">Payments</h1>
       <CreatePaymentButton />
-      <Table>
+      <Table className="border">
         <TableHeader>
           <TableRow>
             {/* <TableHead className="w-[100px]">ID</TableHead> */}
